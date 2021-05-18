@@ -53,6 +53,8 @@ public class GameController {
     public void setPlayerTwoName(String playerTwoName) {this.playerTwoName = playerTwoName;}
     private Position selected;
 
+    private Stage stage;
+
     private KnightGameModel model = new KnightGameModel();
 
     private List<Position> invalidPositions = new ArrayList<>();
@@ -78,13 +80,15 @@ public class GameController {
 
 
 
-    private void fillinvalidpos (){
-        invalidPositions.add(new Position(0,0));
-        invalidPositions.add(new Position(7,7));
-    }
 
-    private Position Player1pos = new Position(7,7);
-    private Position Player2pos = new Position(0,0);
+
+    private Position Player1pos = new Position(7,7); // blue
+    private Position Player2pos = new Position(0,0); // red
+
+    private void fillinvalidpos (){
+        invalidPositions.add(Player1pos);
+        invalidPositions.add(Player2pos);
+    }
 
     @FXML
     private void initialize() {
@@ -154,8 +158,13 @@ public class GameController {
                         selectPosition(position);
                         alterSelectionPhase();
                     }
+                    if (selectablePositions.size() == 0){
+                        gameover();
+                    }
                 }
+
                 case SELECT_TO -> {
+
                     if (selectablePositions.contains(position)) {
                         var pieceNumber = model.getPieceNumber(selected).getAsInt();
                         var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
@@ -163,6 +172,7 @@ public class GameController {
                         model.move(pieceNumber, direction);
                         invalidPositions.add(new Position(position.row(), position.col()));
                         Player1pos = new Position(position.row(),position.col());
+                        showinvalidpositions();
                         Logger.debug("{}, has added to invalidpositions", new Position(position.row(), position.col()));
                         steps.set(steps.get() + 1);
                         deselectSelectedPosition();
@@ -181,22 +191,25 @@ public class GameController {
                         selectPosition(position);
                         alterSelectionPhase();
                     }
+                    if (selectablePositions.size() == 0){
+                        gameover();
+                    }
                 }
                 case SELECT_TO -> {
                     if (selectablePositions.contains(position)) {
-                        var pieceNumber = model.getPieceNumber(selected).getAsInt();
-                        var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
-                        Logger.debug("Moving piece {} {}", pieceNumber, direction);
-                        model.move(pieceNumber, direction);
-                        invalidPositions.add(new Position(position.row(), position.col()));
-                        Player2pos = new Position(position.row(),position.col());
-                        Logger.debug("{}, has added to invalidpositions", new Position(position.row(), position.col()));
-                        steps.set(steps.get() + 1);
-                        deselectSelectedPosition();
-                        alterSelectionPhase();
-                        Logger.debug("{} következik!", model.getNextPlayer());
-                        model.getNextPlayer();
-
+                            var pieceNumber = model.getPieceNumber(selected).getAsInt();
+                            var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
+                            Logger.debug("Moving piece {} {}", pieceNumber, direction);
+                            model.move(pieceNumber, direction);
+                            invalidPositions.add(new Position(position.row(), position.col()));
+                            Player2pos = new Position(position.row(), position.col());
+                            showinvalidpositions();
+                            Logger.debug("{}, has added to invalidpositions", new Position(position.row(), position.col()));
+                            steps.set(steps.get() + 1);
+                            deselectSelectedPosition();
+                            alterSelectionPhase();
+                            Logger.debug("{} következik!", model.getNextPlayer());
+                            model.getNextPlayer();
                     }
                 }
             }
@@ -278,6 +291,13 @@ public class GameController {
         }
     }
 
+    private void showinvalidpositions() {
+        for (var invalidPositions : invalidPositions){
+            var square = getSquare(invalidPositions);
+            square.getStyleClass().add("invalid");
+        }
+    }
+
     private void hideSelectablePositions() {
         for (var selectablePosition : selectablePositions) {
             var square = getSquare(selectablePosition);
@@ -313,10 +333,8 @@ public class GameController {
 
             Logger.info("The game has been given up");
         }
+
         Logger.debug("Saving result");
-        for (var i : invalidPositions){
-            System.out.println(i);
-        }
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
@@ -324,6 +342,24 @@ public class GameController {
         Parent root = fxmlLoader.load();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+
+
+    private void gameover(){
+        if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1){
+        Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerTwoName)));
+        Logger.info("{} winned the game!",playerTwoName);
+        Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
+
+
+
+        }
+        else{
+            Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerOneName)));
+            Logger.info("{} winned the game!",playerOneName);
+            Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
+        }
     }
 
 
