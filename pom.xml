@@ -48,6 +48,8 @@
             <version>5.0.1</version>
             <scope>compile</scope>
         </dependency>
+
+
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-api</artifactId>

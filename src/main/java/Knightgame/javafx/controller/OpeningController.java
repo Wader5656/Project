@@ -19,8 +19,7 @@ import org.tinylog.Logger;
 
 public class OpeningController {
 
-    @Inject
-    private FXMLLoader fxmlLoader;
+
 
     @FXML
     private TextField playerOneNameTextField;
@@ -35,8 +34,8 @@ public class OpeningController {
         if (playerOneNameTextField.getText().isEmpty() || playerTwoNameTextField.getText().isEmpty()) {
             errorLabel.setText("Please enter two names!");
         } else {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
 
-            fxmlLoader.setLocation(getClass().getResource("/fxml/game.fxml"));
             Parent root = fxmlLoader.load();
             fxmlLoader.<GameController>getController().setPlayerOneName(playerOneNameTextField.getText());
             fxmlLoader.<GameController>getController().setPlayerTwoName(playerTwoNameTextField.getText());

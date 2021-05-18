@@ -13,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -47,8 +49,7 @@ public class GameController {
     private Label stepsLabel;
 
 
-    @Inject
-    private FXMLLoader fxmlLoader;
+
 
 
     @FXML
@@ -94,6 +95,7 @@ public class GameController {
     @FXML
     private void initialize() {
         createBoard();
+        Logger.debug("Created the Board!");
         createPieces();
         setSelectablePositions();
         showSelectablePositions();
@@ -224,6 +226,7 @@ public class GameController {
 
     private StackPane getSquare(Position position) {
         for (var child : gameBoard.getChildren()) {
+            System.out.println(GridPane.getRowIndex(child));
             if (GridPane.getRowIndex(child) == position.row() && GridPane.getColumnIndex(child) == position.col()) {
                 return (StackPane) child;
             }
@@ -255,7 +258,11 @@ public class GameController {
         Logger.debug("Saving result");
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        ControllerHelper.loadAndShowFXML(fxmlLoader, "/fxml/highscores.fxml", stage);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
+        Parent root = fxmlLoader.load();
+        stage.setScene(new Scene(root));
+        stage.show();
+
     }
 
 
