@@ -60,6 +60,7 @@ public class GameController {
 
 
 
+
     private KnightGameModel gameState;
 
 
@@ -99,6 +100,7 @@ public class GameController {
         createPieces();
         setSelectablePositions();
         showSelectablePositions();
+        stepsLabel.textProperty().bind(steps.asString());
     }
 
 
@@ -134,7 +136,7 @@ public class GameController {
     }
 
     private Circle createPiece(Color color) {
-        var piece = new Circle(30);
+        var piece = new Circle(25);
         piece.setFill(color);
         return piece;
     }
@@ -163,6 +165,7 @@ public class GameController {
                     var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
                     Logger.debug("Moving piece {} {}", pieceNumber, direction);
                     model.move(pieceNumber, direction);
+                    steps.set(steps.get() + 1);
                     deselectSelectedPosition();
                     alterSelectionPhase();
                 }
@@ -226,8 +229,10 @@ public class GameController {
 
     private StackPane getSquare(Position position) {
         for (var child : gameBoard.getChildren()) {
-            System.out.println(GridPane.getRowIndex(child));
-            if (GridPane.getRowIndex(child) == position.row() && GridPane.getColumnIndex(child) == position.col()) {
+            if (GridPane.getRowIndex(child) == null || GridPane.getColumnIndex(child) == null){
+                continue;
+            }
+            else if (GridPane.getRowIndex(child) == position.row() && GridPane.getColumnIndex(child) == position.col()) {
                 return (StackPane) child;
             }
         }
@@ -244,7 +249,6 @@ public class GameController {
     public void handleResetButton(ActionEvent actionEvent)  {
         Logger.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
         Logger.info("Resetting game");
-
         resetGame();
     }
 
