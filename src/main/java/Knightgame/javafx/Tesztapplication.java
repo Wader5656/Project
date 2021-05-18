@@ -13,7 +13,7 @@ public class Tesztapplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/opening.fxml"));
         stage.setTitle("Knight-Game");
         Scene scene = new Scene(root);
         stage.setScene(scene);

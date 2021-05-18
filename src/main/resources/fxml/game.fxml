@@ -46,14 +46,9 @@
    <bottom>
       <HBox prefHeight="80.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetButton" text="Reset">
-               <HBox.margin>
-                  <Insets left="300.0" top="35.0" />
-               </HBox.margin>
-            </Button>
             <Button fx:id="giveupButton" mnemonicParsing="false" onAction="#handleGiveUpButton" text="Give Up">
                <HBox.margin>
-                  <Insets left="100.0" top="35.0" />
+                  <Insets left="350.0" top="35.0" />
                </HBox.margin>
             </Button>
          </children>

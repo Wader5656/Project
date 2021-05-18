@@ -21,6 +21,7 @@ public class OpeningController {
 
 
 
+
     @FXML
     private TextField playerOneNameTextField;
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.errorprone.annotations.Var;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -17,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -30,11 +28,7 @@ import javafx.stage.Stage;
 import org.tinylog.Logger;
 
 import Knightgame.model.KnightDirection;
-import Knightgame.results.GameResultDao;
 import Knightgame.model.Position;
-import util.javafx.ControllerHelper;
-
-import javax.inject.Inject;
 
 
 public class GameController {
@@ -48,31 +42,20 @@ public class GameController {
     @FXML
     private Label stepsLabel;
 
-
-
-
-
-    @FXML
-    private Button resetButton;
-
     @FXML
     private Button giveupButton;
 
-
-
-
     private KnightGameModel gameState;
-
-
     private IntegerProperty steps = new SimpleIntegerProperty();
-
-
     private String playerOneName;
     private String playerTwoName;
     public void setPlayerOneName(String playerOneName) {this.playerOneName = playerOneName;}
     public void setPlayerTwoName(String playerTwoName) {this.playerTwoName = playerTwoName;}
+    private Position selected;
 
+    private KnightGameModel model = new KnightGameModel();
 
+    private List<Position> invalidPositions = new ArrayList<>();
 
     private enum SelectionPhase {
         SELECT_FROM,
@@ -89,17 +72,29 @@ public class GameController {
 
     private List<Position> selectablePositions = new ArrayList<>();
 
-    private Position selected;
 
-    private KnightGameModel model = new KnightGameModel();
+
+
+
+
+
+    private void fillinvalidpos (){
+        invalidPositions.add(new Position(0,0));
+        invalidPositions.add(new Position(7,7));
+    }
+
+    private Position Player1pos = new Position(7,7);
+    private Position Player2pos = new Position(0,0);
 
     @FXML
     private void initialize() {
         createBoard();
         Logger.debug("Created the Board!");
         createPieces();
+        fillinvalidpos();
         setSelectablePositions();
         showSelectablePositions();
+        Platform.runLater(() -> mainLabel.setText(String.format("Good luck, %s, and %s!", playerOneName,playerTwoName)));
         stepsLabel.textProperty().bind(steps.asString());
     }
 
@@ -152,22 +147,57 @@ public class GameController {
     }
 
     private void handleClickOnSquare(Position position) {
-        switch (selectionPhase) {
-            case SELECT_FROM -> {
-                if (selectablePositions.contains(position)) {
-                    selectPosition(position);
-                    alterSelectionPhase();
+        if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
+            switch (selectionPhase) {
+                case SELECT_FROM -> {
+                    if (selectablePositions.contains(position)) {
+                        selectPosition(position);
+                        alterSelectionPhase();
+                    }
+                }
+                case SELECT_TO -> {
+                    if (selectablePositions.contains(position)) {
+                        var pieceNumber = model.getPieceNumber(selected).getAsInt();
+                        var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
+                        Logger.debug("Moving piece {} {}", pieceNumber, direction);
+                        model.move(pieceNumber, direction);
+                        invalidPositions.add(new Position(position.row(), position.col()));
+                        Player1pos = new Position(position.row(),position.col());
+                        Logger.debug("{}, has added to invalidpositions", new Position(position.row(), position.col()));
+                        steps.set(steps.get() + 1);
+                        deselectSelectedPosition();
+                        alterSelectionPhase();
+                        Logger.debug("{} következik!", model.getNextPlayer());
+                        model.getNextPlayer();
+
+                    }
                 }
             }
-            case SELECT_TO -> {
-                if (selectablePositions.contains(position)) {
-                    var pieceNumber = model.getPieceNumber(selected).getAsInt();
-                    var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
-                    Logger.debug("Moving piece {} {}", pieceNumber, direction);
-                    model.move(pieceNumber, direction);
-                    steps.set(steps.get() + 1);
-                    deselectSelectedPosition();
-                    alterSelectionPhase();
+        }
+        else {
+            switch (selectionPhase) {
+                case SELECT_FROM -> {
+                    if (selectablePositions.contains(position)) {
+                        selectPosition(position);
+                        alterSelectionPhase();
+                    }
+                }
+                case SELECT_TO -> {
+                    if (selectablePositions.contains(position)) {
+                        var pieceNumber = model.getPieceNumber(selected).getAsInt();
+                        var direction = KnightDirection.of(position.row() - selected.row(), position.col() - selected.col());
+                        Logger.debug("Moving piece {} {}", pieceNumber, direction);
+                        model.move(pieceNumber, direction);
+                        invalidPositions.add(new Position(position.row(), position.col()));
+                        Player2pos = new Position(position.row(),position.col());
+                        Logger.debug("{}, has added to invalidpositions", new Position(position.row(), position.col()));
+                        steps.set(steps.get() + 1);
+                        deselectSelectedPosition();
+                        alterSelectionPhase();
+                        Logger.debug("{} következik!", model.getNextPlayer());
+                        model.getNextPlayer();
+
+                    }
                 }
             }
         }
@@ -200,17 +230,45 @@ public class GameController {
         square.getStyleClass().remove("selected");
     }
 
+
+
     private void setSelectablePositions() {
         selectablePositions.clear();
-        switch (selectionPhase) {
-            case SELECT_FROM -> selectablePositions.addAll(model.getPiecePositions());
-            case SELECT_TO -> {
-                var pieceNumber = model.getPieceNumber(selected).getAsInt();
-                for (var direction : model.getValidMoves(pieceNumber)) {
-                    selectablePositions.add(selected.moveTo(direction));
+            if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
+                switch (selectionPhase) {
+                    case SELECT_FROM -> selectablePositions.add(Player1pos);
+
+                    case SELECT_TO -> {
+                        var pieceNumber = model.getPieceNumber(selected).getAsInt();
+
+                        for (var direction : model.getValidMoves(pieceNumber)) {
+                            if (invalidPositions.contains(selected.moveTo(direction))) {
+                                continue;
+                            }
+                            selectablePositions.add(selected.moveTo(direction));
+
+                        }
+                    }
                 }
             }
-        }
+            else{
+                switch (selectionPhase) {
+                    case SELECT_FROM -> selectablePositions.add(Player2pos);
+
+                    case SELECT_TO -> {
+                        var pieceNumber = model.getPieceNumber(selected).getAsInt();
+
+                        for (var direction : model.getValidMoves(pieceNumber)) {
+                            if (invalidPositions.contains(selected.moveTo(direction))) {
+                                continue;
+                            }
+                            selectablePositions.add(selected.moveTo(direction));
+
+                        }
+                    }
+                }
+            }
+
     }
 
     private void showSelectablePositions() {
@@ -246,11 +304,7 @@ public class GameController {
         newSquare.getChildren().addAll(oldSquare.getChildren());
         oldSquare.getChildren().clear();
     }
-    public void handleResetButton(ActionEvent actionEvent)  {
-        Logger.debug("{} is pressed", ((Button) actionEvent.getSource()).getText());
-        Logger.info("Resetting game");
-        resetGame();
-    }
+
 
     public void handleGiveUpButton(ActionEvent actionEvent) throws IOException {
         var buttonText = ((Button) actionEvent.getSource()).getText();
@@ -260,20 +314,20 @@ public class GameController {
             Logger.info("The game has been given up");
         }
         Logger.debug("Saving result");
+        for (var i : invalidPositions){
+            System.out.println(i);
+        }
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
+        Logger.debug("Loading highscore.fxml");
         Parent root = fxmlLoader.load();
         stage.setScene(new Scene(root));
         stage.show();
-
     }
 
 
-    private void resetGame() {
-        gameState = new KnightGameModel();
 
-        steps.set(0);
-    }
+
 
 }

@@ -1,5 +1,6 @@
 package Knightgame.javafx;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.gluonhq.ignite.guice.GuiceContext;
@@ -17,30 +18,15 @@ import util.guice.PersistenceModule;
 import org.tinylog.Logger;
 
 public class KnightApplication extends Application{
-    private GuiceContext context = new GuiceContext(this, () -> List.of(
-            new AbstractModule() {
-                @Override
-                protected void configure() {
-                    install(new PersistenceModule("Knight-game"));
-
-                }
-            }
-    ));
-
-    @Inject
-    private FXMLLoader fxmlLoader;
 
     @Override
-    public void start(Stage stage) throws Exception {
-        Logger.info("Starting application");
-        context.init();
-        fxmlLoader.setLocation(getClass().getResource("/fxml/opening.fxml"));
-        Parent root = fxmlLoader.load();
-        stage.setTitle("Knight Game");
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/opening.fxml"));
+        stage.setTitle("Knight-Game");
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.setResizable(false);
-        stage.setScene(new Scene(root));
         stage.show();
     }
-
 
 }
