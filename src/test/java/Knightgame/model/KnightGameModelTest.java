@@ -61,7 +61,7 @@ class KnightGameModelTest {
         assertThrows(IllegalArgumentException.class, () -> model.isValidMove(-2,KnightDirection.LEFT_UP));
         assertThrows(IllegalArgumentException.class, () -> model.isValidMove(2,KnightDirection.LEFT_UP));
         assertEquals(model.isValidMove(0,KnightDirection.LEFT_UP),false);
-        assertEquals(model.isValidMove(0, KnightDirection.STAY ),false);
+
         assertEquals(model.isValidMove(0,KnightDirection.RIGHT_DOWN),true);
         assertEquals(model.isValidMove(1,KnightDirection.LEFT_UP),true);
     }

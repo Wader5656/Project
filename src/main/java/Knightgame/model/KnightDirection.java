@@ -13,8 +13,8 @@ public enum KnightDirection implements Direction {
     RIGHT_DOWN(1, 2),
     DOWN_RIGHT(2, 1),
     DOWN_LEFT(2, -1),
-    LEFT_DOWN(1, -2),
-    STAY(0,0);
+    LEFT_DOWN(1, -2);
+
 
 
     private final int rowChange;
