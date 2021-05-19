@@ -19,7 +19,12 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Button layoutX="287.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleRestartButton" text="Restart">
+      <Button layoutX="205.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleRestartButton" text="Restart">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="370.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleExitButton" text="Exit">
          <font>
             <Font size="15.0" />
          </font>

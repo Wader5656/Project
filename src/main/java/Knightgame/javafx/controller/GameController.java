@@ -59,6 +59,9 @@ public class GameController {
 
     private List<Position> invalidPositions = new ArrayList<>();
 
+    /**
+     * Gives a selection phase: From -> To
+     */
     private enum SelectionPhase {
         SELECT_FROM,
         SELECT_TO;
@@ -76,20 +79,20 @@ public class GameController {
 
 
 
-
-
-
-
-
-
     private Position Player1pos = new Position(7,7); // blue
     private Position Player2pos = new Position(0,0); // red
 
+    /**
+     * Add the 2 starter positions to invalidPositions.
+     */
     private void fillinvalidpos (){
         invalidPositions.add(Player1pos);
         invalidPositions.add(Player2pos);
     }
 
+    /**
+     * It is responsible for starting the game.
+     */
     @FXML
     private void initialize() {
         createBoard();
@@ -103,7 +106,9 @@ public class GameController {
     }
 
 
-
+    /**
+     * It creates the board.
+     */
     private void createBoard() {
         for (int i = 0; i < gameBoard.getRowCount(); i++) {
             for (int j = 0; j < gameBoard.getColumnCount(); j++) {
@@ -117,6 +122,10 @@ public class GameController {
 
     }
 
+    /**
+     * Creates squares.
+     * @return A square
+     */
     private StackPane createSquare() {
         var square = new StackPane();
         square.getStyleClass().add("square");
@@ -126,6 +135,9 @@ public class GameController {
 
     }
 
+    /**
+     * This method creates the 2 knights, to the starter position.
+     */
     private void createPieces() {
         for (int i = 0; i < model.getPieceCount(); i++) {
             model.positionProperty(i).addListener(this::piecePositionChange);
@@ -134,12 +146,21 @@ public class GameController {
         }
     }
 
+    /**
+     * Creates 2 circle(knights).
+     * @param color The color of the circle.
+     * @return The circle.
+     */
     private Circle createPiece(Color color) {
         var piece = new Circle(25);
         piece.setFill(color);
         return piece;
     }
 
+    /**
+     * This method handle the mouse click. So we can see the square's position.
+     * @param event The mouse click.
+     */
     @FXML
     private void handleMouseClick(MouseEvent event) {
         var square = (StackPane) event.getSource();
@@ -150,6 +171,12 @@ public class GameController {
         handleClickOnSquare(position);
     }
 
+    /**
+     * This method is the most important method. It handles the moving system. It shows me the figure i can make
+     * the move with, and the possible moves. The gameover check is also in this method, so the game ends only
+     * when a player click on the figure, and it has 0 selectable Position.
+     * @param position The position of the square.
+     */
     private void handleClickOnSquare(Position position) {
         if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
             switch (selectionPhase) {
@@ -216,6 +243,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Hide, re set, an show the selectable positions.
+     */
     private void alterSelectionPhase() {
         selectionPhase = selectionPhase.alter();
         hideSelectablePositions();
@@ -223,28 +253,26 @@ public class GameController {
         showSelectablePositions();
     }
 
+    /**
+     * It selects a square based to the position.
+     * @param position The position of the square.
+     */
     private void selectPosition(Position position) {
         selected = position;
-        showSelectedPosition();
     }
 
-    private void showSelectedPosition() {
-        var square = getSquare(selected);
-        square.getStyleClass().add("selected");
-    }
 
+    /**
+     * Deselect the position.
+     */
     private void deselectSelectedPosition() {
-        hideSelectedPosition();
         selected = null;
     }
 
-    private void hideSelectedPosition() {
-        var square = getSquare(selected);
-        square.getStyleClass().remove("selected");
-    }
 
-
-
+    /**
+     * Sets the selectable positions, according to the player, and the invalid positions.
+     */
     private void setSelectablePositions() {
         selectablePositions.clear();
             if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
@@ -284,6 +312,9 @@ public class GameController {
 
     }
 
+    /**
+     * Gives the selectable style to the squares.
+     */
     private void showSelectablePositions() {
         for (var selectablePosition : selectablePositions) {
             var square = getSquare(selectablePosition);
@@ -291,6 +322,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Gives the invalid style to the squares.
+     */
     private void showinvalidpositions() {
         for (var invalidPositions : invalidPositions){
             var square = getSquare(invalidPositions);
@@ -298,6 +332,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Remove selectable class from squares.
+     */
     private void hideSelectablePositions() {
         for (var selectablePosition : selectablePositions) {
             var square = getSquare(selectablePosition);
@@ -305,6 +342,12 @@ public class GameController {
         }
     }
 
+    /**
+     * The method returns a square, if the gridpane's row and column indexes is the same with the position's row and
+     * column indexes.
+     * @param position position of the square.
+     * @return Squares.
+     */
     private StackPane getSquare(Position position) {
         for (var child : gameBoard.getChildren()) {
             if (GridPane.getRowIndex(child) == null || GridPane.getColumnIndex(child) == null){
@@ -317,6 +360,12 @@ public class GameController {
         throw new AssertionError();
     }
 
+    /**
+     * It notes the position changes.
+     * @param observable Observe the changes of the position.
+     * @param oldPosition Last position of the Knight
+     * @param newPosition New position of the Knight
+     */
     private void piecePositionChange(ObservableValue<? extends Position> observable, Position oldPosition, Position newPosition) {
         Logger.debug("Move: {} -> {}", oldPosition, newPosition);
         StackPane oldSquare = getSquare(oldPosition);
@@ -325,13 +374,23 @@ public class GameController {
         oldSquare.getChildren().clear();
     }
 
-
+    /**
+     * Handles give up button. If the game didn't end, then the button has the "Give Up" Words. After the game
+     * finished, then it changes to Highscores. This method leads me to the highscore scene, when it has the give up,
+     * or the highscores button too.
+     * @param actionEvent The clicking.
+     * @throws IOException Throws an IO exception, when there is a problem, with the loading.
+     */
     public void handleGiveUpButton(ActionEvent actionEvent) throws IOException {
         var buttonText = ((Button) actionEvent.getSource()).getText();
         Logger.debug("{} is pressed", buttonText);
         if (buttonText.equals("Give Up")) {
-
-            Logger.info("The game has been given up");
+            if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
+                Logger.info("The game has been given up by {}",playerOneName);
+            }
+            else{
+                Logger.info("The game has been given up by {}",playerTwoName);
+            }
         }
 
         Logger.debug("Saving result");
@@ -345,20 +404,21 @@ public class GameController {
     }
 
 
-
+    /**
+     * Checks, that are there any possible moves to the knight. If no, then the other player wins the game.
+     */
     private void gameover(){
         if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1){
         Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerTwoName)));
         Logger.info("{} winned the game!",playerTwoName);
         Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
-
-
-
+        var Winner = playerTwoName;
         }
         else{
             Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerOneName)));
             Logger.info("{} winned the game!",playerOneName);
             Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
+            var Winner = playerOneName;
         }
     }
 

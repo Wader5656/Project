@@ -29,5 +29,10 @@
          </font>
       </Button>
       <Label fx:id="errorLabel" layoutX="173.0" layoutY="256.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="169.0" textFill="RED" />
+      <Button layoutX="534.0" layoutY="345.0" mnemonicParsing="false" onAction="#handleExitButton" text="Exit">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
