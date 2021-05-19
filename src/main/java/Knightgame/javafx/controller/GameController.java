@@ -83,7 +83,7 @@ public class GameController {
     private Position Player2pos = new Position(0,0); // red
 
     /**
-     * Add the 2 starter positions to invalidPositions.
+     * Add the 2 starter positions to {@code invalidPositions}.
      */
     private void fillinvalidpos (){
         invalidPositions.add(Player1pos);
@@ -173,8 +173,8 @@ public class GameController {
 
     /**
      * This method is the most important method. It handles the moving system. It shows me the figure i can make
-     * the move with, and the possible moves. The gameover check is also in this method, so the game ends only
-     * when a player click on the figure, and it has 0 selectable Position.
+     * the move with, and the possible moves. The {@code gameover} check is also in this method, so the game ends only
+     * when a player click on the figure, and it has 0 {@code selectablePositions}.
      * @param position The position of the square.
      */
     private void handleClickOnSquare(Position position) {
@@ -244,7 +244,7 @@ public class GameController {
     }
 
     /**
-     * Hide, re set, an show the selectable positions.
+     * Hide, re set, an show the {@code selectablePositions}.
      */
     private void alterSelectionPhase() {
         selectionPhase = selectionPhase.alter();
@@ -254,7 +254,7 @@ public class GameController {
     }
 
     /**
-     * It selects a square based to the position.
+     * It selects a square based to the {@code position}.
      * @param position The position of the square.
      */
     private void selectPosition(Position position) {
@@ -263,7 +263,7 @@ public class GameController {
 
 
     /**
-     * Deselect the position.
+     * Deselect the {@code position}.
      */
     private void deselectSelectedPosition() {
         selected = null;
@@ -271,7 +271,7 @@ public class GameController {
 
 
     /**
-     * Sets the selectable positions, according to the player, and the invalid positions.
+     * Sets the {@code selectablePositions}, according to the player, and the {@code invalidPositions}.
      */
     private void setSelectablePositions() {
         selectablePositions.clear();
@@ -361,7 +361,7 @@ public class GameController {
     }
 
     /**
-     * It notes the position changes.
+     * It notes the {@code position} changes.
      * @param observable Observe the changes of the position.
      * @param oldPosition Last position of the Knight
      * @param newPosition New position of the Knight

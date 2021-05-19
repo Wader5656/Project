@@ -79,7 +79,7 @@ public class KnightGameModel {
 
     /**
      * getter
-     * @param pieceNumber Number of piece.
+     * @param pieceNumber An index for a number.
      * @return the type of the pieces.
      */
     public PieceType getPieceType(int pieceNumber) {
@@ -88,7 +88,7 @@ public class KnightGameModel {
 
     /**
      *  getter
-     * @param pieceNumber Number of piece.
+     * @param pieceNumber An index for a number.
      * @return the position of the pieces.
      */
     public Position getPiecePosition(int pieceNumber) {
@@ -97,7 +97,7 @@ public class KnightGameModel {
 
     /**
      * We can track the positions.
-     * @param pieceNumber Pieces number.
+     * @param pieceNumber An index for a number.
      * @return the property of the position.
      */
     public ObjectProperty<Position> positionProperty(int pieceNumber) {
@@ -106,7 +106,7 @@ public class KnightGameModel {
 
     /**
      * Checks that the move is valid, or not.
-     * @param pieceNumber the number or piece.
+     * @param pieceNumber An index for a number.
      * @param direction The row and col changes.
      * @return True if the move is valid, and false if not valid.
      */
@@ -128,8 +128,8 @@ public class KnightGameModel {
 
     /**
      * Get the valid moves.
-     * @param pieceNumber number of piece.
-     * @return the valid moves.
+     * @param pieceNumber An index for a number.
+     * @return the valid move's list.
      */
     public Set<KnightDirection> getValidMoves(int pieceNumber) {
         EnumSet<KnightDirection> validMoves = EnumSet.noneOf(KnightDirection.class);
@@ -143,7 +143,7 @@ public class KnightGameModel {
 
     /**
      * Move, and set the next player.
-     * @param pieceNumber number of piece.
+     * @param pieceNumber An index for a number.
      * @param direction row and col changes.
      */
     public void move(int pieceNumber, KnightDirection direction) {
@@ -163,9 +163,9 @@ public class KnightGameModel {
 
 
     /**
-     * Returns the number of the piece, that is on the position.
+     * Returns the index of the piece, that is on the position.
      * @param position position
-     * @return the number of the piece
+     * @return the index of the piece
      */
     public OptionalInt getPieceNumber(Position position) {
         for (int i = 0; i < pieces.length; i++) {
@@ -189,7 +189,5 @@ public class KnightGameModel {
     }
 
     public static void main(String[] args) {
-        KnightGameModel model = new KnightGameModel();
-        System.out.println(model);
     }
 }

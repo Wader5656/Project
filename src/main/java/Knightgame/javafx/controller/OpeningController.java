@@ -42,7 +42,6 @@ public class OpeningController {
             Logger.info("The users entered one name, not two!");
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
-
             Parent root = fxmlLoader.load();
             fxmlLoader.<GameController>getController().setPlayerOneName(playerOneNameTextField.getText());
             fxmlLoader.<GameController>getController().setPlayerTwoName(playerTwoNameTextField.getText());
