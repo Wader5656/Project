@@ -3,12 +3,15 @@ package Knightgame.model;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * Piece.
+ */
 public class Piece {
     private final PieceType type;
     private final ObjectProperty<Position> position = new SimpleObjectProperty<>();
 
     /**
-     * constructor
+     * constructor.
      * @param type The type of the knight.
      * @param position The position of the knight.
      */
@@ -18,7 +21,7 @@ public class Piece {
     }
 
     /**
-     * getter
+     * getter.
      * @return tpye
      */
     public PieceType getType() {
@@ -26,7 +29,7 @@ public class Piece {
     }
 
     /**
-     * getter
+     * getter.
      * @return position
      */
     public Position getPosition() {
@@ -51,13 +54,17 @@ public class Piece {
     }
 
     /**
-     * Formating
+     * Formating.
      * @return the format of the piece.
      */
     public String toString() {
         return type.toString() + position.get().toString();
     }
 
+    /**
+     * Main.
+     * @param args arguments.
+     */
     public static void main(String[] args) { }
 }
 

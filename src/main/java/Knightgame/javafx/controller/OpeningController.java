@@ -14,7 +14,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import org.tinylog.Logger;
 
-
+/**
+ * Opening controller.
+ */
 public class OpeningController {
 
 

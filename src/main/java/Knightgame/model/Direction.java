@@ -5,7 +5,16 @@ package Knightgame.model;
  */
 public interface Direction {
 
+    /**
+     * Row changes.
+     * @return row change as an Integer
+     */
     int getRowChange();
+
+    /**
+     * Column change.
+     * @return col change as an Integer.
+     */
     int getColChange();
 
 }

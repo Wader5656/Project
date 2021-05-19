@@ -5,14 +5,37 @@ package Knightgame.model;
  * Implements the 8 possible move types.
  */
 public enum KnightDirection implements Direction {
-
+    /**
+     * Left_Up move.
+     */
     LEFT_UP(-1, -2),
+    /**
+     *Up_Left.
+     */
     UP_LEFT(-2, -1),
+    /**
+     * Up_Right.
+     */
     UP_RIGHT(-2, 1),
+    /**
+     * Right_Up.
+     */
     RIGHT_UP(-1, 2),
+    /**
+     * Right_Down.
+     */
     RIGHT_DOWN(1, 2),
+    /**
+     * Down_Right.
+     */
     DOWN_RIGHT(2, 1),
+    /**
+     * Down_left.
+     */
     DOWN_LEFT(2, -1),
+    /**
+     * Left_down.
+     */
     LEFT_DOWN(1, -2);
 
 
@@ -21,7 +44,7 @@ public enum KnightDirection implements Direction {
     private final int colChange;
 
     /**
-     * Constructor
+     * Constructor.
      * @param rowChange new row position - old row position
      * @param colChange new col position - old col position
      */
@@ -31,7 +54,7 @@ public enum KnightDirection implements Direction {
     }
 
     /**
-     * getter
+     * getter.
      * @return the row change.
      */
     public int getRowChange() {
@@ -39,7 +62,7 @@ public enum KnightDirection implements Direction {
     }
 
     /**
-     * getter
+     * getter.
      * @return the col change.
      */
     public int getColChange() {
@@ -61,6 +84,10 @@ public enum KnightDirection implements Direction {
         throw new IllegalArgumentException();
     }
 
+    /**
+     * Main class.
+     * @param args arguments
+     */
     public static void main(String[] args) {
     }
 

@@ -5,17 +5,28 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 
 import java.util.*;
 
-
+/**
+ * KnightGameModel.
+ */
 public class KnightGameModel {
-
+    /**
+     * Size of the Board.
+     */
     public static int BOARD_SIZE = 8;
 
     /**
      * Switching sides, with enum.
      */
     public enum Player {
+        /**
+         * 2 player.
+         */
         PLAYER1, PLAYER2;
 
+        /**
+         * Who comes, after Player1, and 2.
+         * @return the next player.
+         */
         public Player next(){
             return switch (this){
                 case PLAYER1 -> PLAYER2;
@@ -38,7 +49,7 @@ public class KnightGameModel {
     }
 
     /**
-     * The constructor
+     * The constructor.
      * @param pieces the pieces
      */
     public KnightGameModel(Piece... pieces) {
@@ -47,7 +58,7 @@ public class KnightGameModel {
     }
 
     /**
-     * Defines the next player
+     * Defines the next player.
      * @return a Player object, with the next player.
      */
     public Player getNextPlayer() {
@@ -70,7 +81,7 @@ public class KnightGameModel {
     }
 
     /**
-     * getter
+     * getter.
      * @return pieces.length
      */
     public int getPieceCount() {
@@ -78,7 +89,7 @@ public class KnightGameModel {
     }
 
     /**
-     * getter
+     * getter.
      * @param pieceNumber An index for a number.
      * @return the type of the pieces.
      */
@@ -87,7 +98,7 @@ public class KnightGameModel {
     }
 
     /**
-     *  getter
+     *  getter.
      * @param pieceNumber An index for a number.
      * @return the position of the pieces.
      */
@@ -177,7 +188,7 @@ public class KnightGameModel {
     }
 
     /**
-     * Formating
+     * Formating.
      * @return the format of a piece.
      */
     public String toString() {
@@ -188,6 +199,10 @@ public class KnightGameModel {
         return joiner.toString();
     }
 
+    /**
+     * Main.
+     * @param args arguments.
+     */
     public static void main(String[] args) {
     }
 }

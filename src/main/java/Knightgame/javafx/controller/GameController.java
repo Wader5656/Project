@@ -30,7 +30,9 @@ import org.tinylog.Logger;
 import Knightgame.model.KnightDirection;
 import Knightgame.model.Position;
 
-
+/**
+ * Gamecontroller.
+ */
 public class GameController {
 
     @FXML
@@ -57,10 +59,13 @@ public class GameController {
 
     private KnightGameModel model = new KnightGameModel();
 
+    /**
+     * A list, that contais the invalid positions.
+     */
     private List<Position> invalidPositions = new ArrayList<>();
 
     /**
-     * Gives a selection phase: From -> To
+     * Gives a selection phase: From -> To.
      */
     private enum SelectionPhase {
         SELECT_FROM,
@@ -172,8 +177,9 @@ public class GameController {
     }
 
     /**
-     * This method is the most important method. It handles the moving system. It shows me the figure i can make
-     * the move with, and the possible moves. The {@code gameover} check is also in this method, so the game ends only
+     * This method is the most important method. It handles the moving system.
+     * It shows me the figure i can make the move with, and the possible moves.
+     * The {@code gameover} check is also in this method, so the game ends only
      * when a player click on the figure, and it has 0 {@code selectablePositions}.
      * @param position The position of the square.
      */
@@ -375,9 +381,9 @@ public class GameController {
     }
 
     /**
-     * Handles give up button. If the game didn't end, then the button has the "Give Up" Words. After the game
-     * finished, then it changes to Highscores. This method leads me to the highscore scene, when it has the give up,
-     * or the highscores button too.
+     * Handles give up button. If the game didn't end, then the button has the "Give Up" Words.
+     * After the game finished, then it changes to Highscores. This method leads me to the highscore scene,
+     * when it has the give up, or the highscores button too.
      * @param actionEvent The clicking.
      * @throws IOException Throws an IO exception, when there is a problem, with the loading.
      */
@@ -405,7 +411,8 @@ public class GameController {
 
 
     /**
-     * Checks, that are there any possible moves to the knight. If no, then the other player wins the game.
+     * Checks, that are there any possible moves to the knight.
+     * If no, then the other player wins the game.
      */
     private void gameover(){
         if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1){
