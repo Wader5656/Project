@@ -10,31 +10,31 @@ public enum KnightDirection implements Direction {
      */
     LEFT_UP(-1, -2),
     /**
-     *Up_Left.
+     *Up_Left move.
      */
     UP_LEFT(-2, -1),
     /**
-     * Up_Right.
+     * Up_Right move.
      */
     UP_RIGHT(-2, 1),
     /**
-     * Right_Up.
+     * Right_Up move.
      */
     RIGHT_UP(-1, 2),
     /**
-     * Right_Down.
+     * Right_Down move.
      */
     RIGHT_DOWN(1, 2),
     /**
-     * Down_Right.
+     * Down_Right move.
      */
     DOWN_RIGHT(2, 1),
     /**
-     * Down_left.
+     * Down_left move.
      */
     DOWN_LEFT(2, -1),
     /**
-     * Left_down.
+     * Left_down move.
      */
     LEFT_DOWN(1, -2);
 

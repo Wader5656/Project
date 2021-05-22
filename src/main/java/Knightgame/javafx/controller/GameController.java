@@ -1,6 +1,8 @@
 package Knightgame.javafx.controller;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +20,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
-
 import Knightgame.model.KnightGameModel;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.tinylog.Logger;
-
 import Knightgame.model.KnightDirection;
 import Knightgame.model.Position;
+import Knightgame.results.GameResult;
+import Knightgame.results.GameResultDao;
+
+
+
 
 /**
  * Gamecontroller.
@@ -47,15 +51,18 @@ public class GameController {
     @FXML
     private Button giveupButton;
 
-    private KnightGameModel gameState;
+
+
+
     private IntegerProperty steps = new SimpleIntegerProperty();
     private String playerOneName;
     private String playerTwoName;
+    private String Winner;
+
     public void setPlayerOneName(String playerOneName) {this.playerOneName = playerOneName;}
     public void setPlayerTwoName(String playerTwoName) {this.playerTwoName = playerTwoName;}
     private Position selected;
 
-    private Stage stage;
 
     private KnightGameModel model = new KnightGameModel();
 
@@ -81,8 +88,6 @@ public class GameController {
     private SelectionPhase selectionPhase = SelectionPhase.SELECT_FROM;
 
     private List<Position> selectablePositions = new ArrayList<>();
-
-
 
     private Position Player1pos = new Position(7,7); // blue
     private Position Player2pos = new Position(0,0); // red
@@ -110,7 +115,6 @@ public class GameController {
         stepsLabel.textProperty().bind(steps.asString());
     }
 
-
     /**
      * It creates the board.
      */
@@ -121,10 +125,6 @@ public class GameController {
                 gameBoard.add(square, j, i);
             }
         }
-
-
-
-
     }
 
     /**
@@ -267,14 +267,12 @@ public class GameController {
         selected = position;
     }
 
-
     /**
      * Deselect the {@code position}.
      */
     private void deselectSelectedPosition() {
         selected = null;
     }
-
 
     /**
      * Sets the {@code selectablePositions}, according to the player, and the {@code invalidPositions}.
@@ -400,7 +398,15 @@ public class GameController {
         }
 
         Logger.debug("Saving result");
-
+        if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1){
+            Winner = playerTwoName;
+        }
+        else {
+             Winner = playerOneName;
+        }
+        System.out.println(createGameResults());
+        GameResultDao gameResultDao = new GameResultDao();
+        gameResultDao.persist(createGameResults());
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
         Logger.debug("Loading highscore.fxml");
@@ -419,14 +425,20 @@ public class GameController {
         Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerTwoName)));
         Logger.info("{} winned the game!",playerTwoName);
         Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
-        var Winner = playerTwoName;
         }
         else{
             Platform.runLater(() -> mainLabel.setText(String.format("The Winner is %s!", playerOneName)));
             Logger.info("{} winned the game!",playerOneName);
             Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
-            var Winner = playerOneName;
         }
+    }
+    private GameResult createGameResults() {
+        return GameResult.builder()
+                .playerOneName(playerOneName)
+                .playerTwoName(playerTwoName)
+                .winner(Winner)
+                .steps(steps.get())
+                .build();
     }
 
 

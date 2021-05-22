@@ -8,10 +8,10 @@
    <children>
       <TableView layoutX="20.0" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0">
         <columns>
-          <TableColumn prefWidth="150.0" text="Player One" />
-          <TableColumn prefWidth="150.0" text="Player Two" />
-            <TableColumn prefWidth="150.0" text="Who wins" />
-            <TableColumn prefWidth="150.0" text="Steps" />
+          <TableColumn fx:id="playerone" prefWidth="150.0" text="Player One" />
+          <TableColumn fx:id="playertwo" prefWidth="150.0" text="Player Two" />
+            <TableColumn fx:id="winner" prefWidth="150.0" text="Winner" />
+            <TableColumn fx:id="steps" prefWidth="150.0" text="Steps" />
         </columns>
       </TableView>
       <Label layoutX="238.0" text="High Scores:">
