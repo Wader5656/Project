@@ -75,6 +75,7 @@ public class HighscoreController {
      */
     @FXML
     private void initialize(){
+        Logger.debug("Loading datas from xml.");
         HighScoreDAO highScoreDao = new HighScoreDAO();
         HighScore hs = new HighScore();
         hs = highScoreDao.getHighScores();
@@ -84,6 +85,7 @@ public class HighscoreController {
         ObservableList<Score> observableResult = FXCollections.observableArrayList();
         observableResult.addAll(highScoreList);
         highScoreTable.setItems(observableResult);
+        Logger.debug("Highscores are ready!");
     }
 
 

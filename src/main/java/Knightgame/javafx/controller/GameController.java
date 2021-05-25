@@ -404,10 +404,11 @@ public class GameController {
         else {
             Winner = playerOneName;
         }
-        Logger.debug("Saving result");
+        Logger.debug("Saving results to highscore.xml");
         Score newScore = new Score(Winner, stepsLabel.getText());
         HighScoreDAO highScoreDAO = new HighScoreDAO();
         highScoreDAO.addScore(newScore);
+        Logger.debug("Saved!");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
         Logger.debug("Loading highscore.fxml");
