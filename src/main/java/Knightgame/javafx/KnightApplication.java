@@ -11,8 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.tinylog.Logger;
-import util.guice.PersistenceModule;
-import Knightgame.results.GameResultDao;
+
 
 
 /**
@@ -20,15 +19,7 @@ import Knightgame.results.GameResultDao;
  */
 public class KnightApplication extends Application{
 
-    private GuiceContext context = new GuiceContext(this, () -> List.of(
-            new AbstractModule() {
-                @Override
-                protected void configure() {
-                    install(new PersistenceModule("Knight-game"));
-                    bind(GameResultDao.class);
-                }
-            }
-    ));
+
 
 
     /**
@@ -39,7 +30,6 @@ public class KnightApplication extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         Logger.debug("Started opening.fxml");
-        context.init();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/opening.fxml"));
         stage.setTitle("Knight-Game");
         Scene scene = new Scene(root);

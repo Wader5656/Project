@@ -1,11 +1,11 @@
 package Knightgame.javafx.controller;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import Knightgame.dao.HighScoreDAO;
+import Knightgame.dao.Score;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -28,8 +28,8 @@ import javafx.stage.Stage;
 import org.tinylog.Logger;
 import Knightgame.model.KnightDirection;
 import Knightgame.model.Position;
-import Knightgame.results.GameResult;
-import Knightgame.results.GameResultDao;
+import Knightgame.dao.Score;
+
 
 
 
@@ -391,22 +391,23 @@ public class GameController {
         if (buttonText.equals("Give Up")) {
             if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
                 Logger.info("The game has been given up by {}",playerOneName);
+
             }
             else{
                 Logger.info("The game has been given up by {}",playerTwoName);
+
             }
         }
-
-        Logger.debug("Saving result");
-        if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1){
+        if (model.getNextPlayer() == KnightGameModel.Player.PLAYER1) {
             Winner = playerTwoName;
         }
         else {
-             Winner = playerOneName;
+            Winner = playerOneName;
         }
-        System.out.println(createGameResults());
-        GameResultDao gameResultDao = new GameResultDao();
-        gameResultDao.persist(createGameResults());
+        Logger.debug("Saving result");
+        Score newScore = new Score(Winner, stepsLabel.getText());
+        HighScoreDAO highScoreDAO = new HighScoreDAO();
+        highScoreDAO.addScore(newScore);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/highscore.fxml"));
         Logger.debug("Loading highscore.fxml");
@@ -432,14 +433,7 @@ public class GameController {
             Platform.runLater(() -> giveupButton.setText(String.format("Highscores")));
         }
     }
-    private GameResult createGameResults() {
-        return GameResult.builder()
-                .playerOneName(playerOneName)
-                .playerTwoName(playerTwoName)
-                .winner(Winner)
-                .steps(steps.get())
-                .build();
-    }
+
 
 
 

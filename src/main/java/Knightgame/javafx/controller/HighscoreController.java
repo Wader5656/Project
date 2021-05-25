@@ -3,6 +3,9 @@ package Knightgame.javafx.controller;
 import java.io.IOException;
 import java.util.List;
 
+import Knightgame.dao.HighScore;
+import Knightgame.dao.HighScoreDAO;
+import Knightgame.dao.Score;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,53 +22,25 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.tinylog.Logger;
 
-import Knightgame.results.GameResult;
-import Knightgame.results.GameResultDao;
 
-import javax.inject.Inject;
+
 
 /**
  * Highscore controller.
  */
 public class HighscoreController {
 
-    @Inject
-    private GameResultDao gameResultDao;
-
-    @FXML
-    private TableView<GameResult> highScoreTable;
-
-    @FXML
-    private TableColumn<GameResult, String> playerone;
-
-    @FXML
-    private  TableColumn<GameResult,String> playertwo;
-
-    @FXML
-    private  TableColumn<GameResult,String> winner;
-
-    @FXML
-    private TableColumn<GameResult, Integer> steps;
-
-    public HighscoreController() {
-    }
 
 
     @FXML
-    private void initialize(){
-        Logger.debug("Loading high scores...");
-        List<GameResult> highScoreList = gameResultDao.findBest(10);
+    private TableView<Score> highScoreTable;
 
-        playerone.setCellValueFactory(new PropertyValueFactory<>("playerOneName"));
-        playertwo.setCellValueFactory(new PropertyValueFactory<>("playerTwoName"));
-        winner.setCellValueFactory(new PropertyValueFactory<>("winner"));
-        steps.setCellValueFactory(new PropertyValueFactory<>("steps"));
+    @FXML
+    private TableColumn<Score, String> winner;
 
-        ObservableList<GameResult> observableResult = FXCollections.observableArrayList();
-        observableResult.addAll(highScoreList);
+    @FXML
+    private TableColumn<Score, String> steps;
 
-        highScoreTable.setItems(observableResult);
-    }
 
     /**
      *  Restart the game, after a match finished, and the players check the highscores.
@@ -93,6 +68,25 @@ public class HighscoreController {
         Platform.exit();
 
     }
+
+    /**
+     * The soul of the controller.
+     * This fits the data's to the cells.
+     */
+    @FXML
+    private void initialize(){
+        HighScoreDAO highScoreDao = new HighScoreDAO();
+        HighScore hs = new HighScore();
+        hs = highScoreDao.getHighScores();
+        winner.setCellValueFactory(new PropertyValueFactory<>("winner"));
+        steps.setCellValueFactory(new PropertyValueFactory<>("steps"));
+        List<Score> highScoreList = hs.getHighscore();
+        ObservableList<Score> observableResult = FXCollections.observableArrayList();
+        observableResult.addAll(highScoreList);
+        highScoreTable.setItems(observableResult);
+    }
+
+
 
 
 
