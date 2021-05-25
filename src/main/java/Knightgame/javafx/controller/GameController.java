@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 import org.tinylog.Logger;
 import Knightgame.model.KnightDirection;
 import Knightgame.model.Position;
-import Knightgame.dao.Score;
+
 
 
 
@@ -291,7 +291,6 @@ public class GameController {
                                 continue;
                             }
                             selectablePositions.add(selected.moveTo(direction));
-
                         }
                     }
                 }

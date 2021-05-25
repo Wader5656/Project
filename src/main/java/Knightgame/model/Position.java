@@ -2,6 +2,8 @@ package Knightgame.model;
 
 /**
  * Position.
+ * @param row row number.
+ * @param col col number.
  */
 public record Position(int row, int col) {
     /**
