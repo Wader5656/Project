@@ -1,6 +1,8 @@
 package Knightgame.dao;
 
 
+import org.tinylog.Logger;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -13,9 +15,15 @@ import java.io.*;
  */
 public class HighScoreDAO {
     /**
-     * The path of the xml file.
+     * The path of the xml file for Windows.
      */
-    public String path ="src\\main\\resources\\highscore.xml";
+    //public String path ="src\\main\\resources\\highscore.xml";
+
+    /**
+     * Path for linux (I guess) I have Windows.
+     */
+    public String path = "src/main/resources/highscore.xml";
+
     /**
      * Add to score to XML file.
      *
@@ -31,8 +39,8 @@ public class HighScoreDAO {
             File file = new File(path);
             OutputStream outputStream = new FileOutputStream(path);
             marshaller.marshal(highScore,file);
+            Logger.info("Jelenlegi xml tartalom:");
             marshaller.marshal(highScore,System.out);
-            System.out.println(outputStream);
         } catch (JAXBException | IOException e) {
             e.printStackTrace();
         }
