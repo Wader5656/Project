@@ -20,13 +20,12 @@ public class HighScoreDAO {
     //public String path ="src\\main\\resources\\highscore.xml";
 
     /**
-     * Path for linux (I guess) I have Windows.
+     * Path for linux, and IDEA.
      */
     public String path = "src/main/resources/highscore.xml";
 
     /**
      * Add to score to XML file.
-     *
      * @param score Score.
      */
     public void addScore(Score score){
@@ -48,7 +47,6 @@ public class HighScoreDAO {
 
     /**
      * Read the elements of the XML file.
-     *
      * @return Highscore list.
      */
     public HighScore getHighScores(){

@@ -30,9 +30,9 @@ public class HighScore {
         Collections.sort(highscore, (hs1, hs2) -> {
             return Integer.parseInt(hs2.getSteps()) - Integer.parseInt(hs1.getSteps());
         });
-        if (highscore.size() > 5) {
+        if (highscore.size() > 19) {
             for (int i = 0; i < highscore.size(); i++) {
-                highscore.subList(5, highscore.size()).clear();
+                highscore.subList(19, highscore.size()).clear();
             }
         }
         return highscore;
