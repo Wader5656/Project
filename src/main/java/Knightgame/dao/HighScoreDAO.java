@@ -38,9 +38,15 @@ public class HighScoreDAO {
             marshaller.marshal(highScore,file);
             Logger.info("Jelenlegi xml tartalom:");
             marshaller.marshal(highScore,System.out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (JAXBException | IOException e) {
             e.printStackTrace();
         }
+
+
+
+
     }
 
     /**
