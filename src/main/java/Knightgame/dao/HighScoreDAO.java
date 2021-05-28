@@ -14,15 +14,13 @@ import java.io.*;
  * The HighScoreDAO implements the methods to read and white XML file.
  */
 public class HighScoreDAO {
-    /**
-     * The path of the xml file for Windows.
-     */
-    //public String path ="src\\main\\resources\\highscore.xml";
+
+
 
     /**
      * Path for linux, and IDEA.
      */
-    public String path = "src/main/resources/highscore.xml";
+    public String path = "highscore.xml";
 
     /**
      * Add to score to XML file.
